@@ -1,4 +1,4 @@
-from builtins import range
+from builtins import range  
 import numpy as np
 
 
@@ -198,6 +198,11 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         pass
+        batch_mean = np.mean(x, axis=0)
+        batch_std = np.std(x, axis=0)
+        x_normalized = (x - batch_mean) / (batch_std + eps)
+        out = gamma * x_normalized + beta
+        
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #######################################################################
@@ -439,7 +444,7 @@ def dropout_forward(x, dropout_param):
         #######################################################################
 
     cache = (dropout_param, mask)
-    out = out.astype(x.dtype, copy=False)
+    out = out.astype(x.dtype, copy=False)  # type: ignore
 
     return out, cache
 
