@@ -196,7 +196,7 @@ class FullyConnectedNet(object):
                     layer_output, gamma, beta, self.bn_params[layer_idx]
                 )
             if self.use_dropout:
-                layer_output, _ = dropout_forward(layer_output, self.dropout_param)
+                layer_output, layer_cache['dropout'] = dropout_forward(layer_output, self.dropout_param)
             layer_input = layer_output
             X_cache[f"layer{layer_idx + 1}"] = layer_cache
 
@@ -243,7 +243,7 @@ class FullyConnectedNet(object):
                 self.params[f"W{layer_idx}"] ** 2
             )  # L2 regularization
             if self.use_dropout:
-                dout = dropout_backward(dout, self.dropout_param)
+                dout = dropout_backward(dout, layer_cache['dropout'])
             dout = relu_backward(dout, layer_cache["activation"])
             if self.normalization == "batchnorm":
                 dout, grads[f"gamma{layer_idx}"], grads[f"beta{layer_idx}"] = (
