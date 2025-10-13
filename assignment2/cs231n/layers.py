@@ -109,7 +109,7 @@ def relu_backward(dout, cache):
     return dx
 
 
-def softmax_loss(x, y)  -> tuple[float, np.ndarray]:
+def softmax_loss(x, y) -> tuple[float, np.ndarray]:
     """Computes the loss and gradient for softmax classification.
 
     Inputs:
@@ -397,14 +397,22 @@ def layernorm_backward(dout, cache):
     # implementation of batch normalization. The hints to the forward pass    #
     # still apply!                                                            #
     ###########################################################################
-    
+
     x_hat, gamma, x_mean, x_var, eps = cache
     _, D = dout.shape
     dbeta = np.sum(dout, axis=0)
     dgamma = np.sum(dout * x_hat, axis=0)
     dx_hat = dout * gamma
     std = np.sqrt(x_var + eps)
-    dx = 1 / std * (dx_hat - 1 / D * np.sum(dx_hat, axis=1, keepdims=True) - 1 / D * x_hat * np.sum(dx_hat * x_hat, axis=1, keepdims=True))
+    dx = (
+        1
+        / std
+        * (
+            dx_hat
+            - 1 / D * np.sum(dx_hat, axis=1, keepdims=True)
+            - 1 / D * x_hat * np.sum(dx_hat * x_hat, axis=1, keepdims=True)
+        )
+    )
 
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -526,7 +534,31 @@ def conv_forward_naive(x, w, b, conv_param):
     # TODO: Implement the convolutional forward pass.                         #
     # Hint: you can use the function np.pad for padding.                      #
     ###########################################################################
-    #
+
+    N, _, H, W = x.shape
+    F, _, HH, WW = w.shape
+    padding = conv_param["pad"]
+    stride = conv_param["stride"]
+    out = np.zeros(
+        (
+            N,
+            F,
+            1 + (H + 2 * padding - HH) // stride,
+            1 + (W + 2 * padding - WW) // stride,
+        )
+    )
+    x_padded = x.copy()
+    x_padded = np.pad(
+        x, ((0, 0), (0, 0), (padding, padding), (padding, padding)), "constant"
+    )
+    for i, one_x in enumerate(x_padded):
+        for y_idx in np.arange(0, H + 2 * padding - HH + 1, stride):
+            for x_idx in np.arange(0, W + 2 * padding - WW + 1, stride):
+                receptive_field = one_x[:, y_idx : y_idx + HH, x_idx : x_idx + WW]
+                for j, one_filter in enumerate(w):
+                    receptive_res = np.sum(receptive_field * one_filter)
+                    out[i, j, y_idx // stride, x_idx // stride] = receptive_res + b[j]
+
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
@@ -550,7 +582,38 @@ def conv_backward_naive(dout, cache):
     ###########################################################################
     # TODO: Implement the convolutional backward pass.                        #
     ###########################################################################
-    #
+
+    x, w, b, conv_param = cache
+    stride, padding = conv_param["stride"], conv_param["pad"]
+    N, C, H, W = x.shape
+    F, _, HH, WW = w.shape  # F * C * HH * WW
+    _, _, H_out, W_out = dout.shape  # N * F * H_out * W_out
+    db = np.sum(dout, axis=(0, 2, 3))
+    dw = np.zeros_like(w)
+    x_padded = np.pad(
+        x, ((0, 0), (0, 0), (padding, padding), (padding, padding)), "constant"
+    )
+    for i, one_out in enumerate(dout):
+        for y_idx in range(H_out):
+            for x_idx in range(W_out):
+                receptive_field = x_padded[
+                    i, :, y_idx * stride : y_idx * stride + HH, x_idx * stride : x_idx * stride + WW
+                ]
+                for j in range(F):
+                    dw[j] += one_out[j, y_idx, x_idx] * receptive_field
+    dx = np.zeros_like(x_padded)
+    for i, one_out in enumerate(dout):
+        for j, one_layer in enumerate(one_out):
+            for y_idx in range(H_out):
+                for x_idx in range(W_out):
+                    dx[
+                        i,
+                        :,
+                        y_idx * stride : y_idx * stride + HH,
+                        x_idx * stride : x_idx * stride + WW,
+                    ] += one_layer[y_idx, x_idx] * w[j]
+    dx = dx[:, :, padding : padding + H, padding : padding + W]
+
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
