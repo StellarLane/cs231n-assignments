@@ -1,4 +1,4 @@
-from builtins import range  
+from builtins import range
 import numpy as np
 
 
@@ -26,7 +26,7 @@ def affine_forward(x, w, b):
     # will need to reshape the input into rows.                               #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    
+
     x_flatten = np.reshape(x, (x.shape[0], -1))
     # print(x_flatten.shape, w.shape, b.shape)
     out = x_flatten.dot(w) + b
@@ -202,7 +202,6 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         batch_std = np.std(x, axis=0)
         x_normalized = (x - batch_mean) / (batch_std + eps)
         out = gamma * x_normalized + beta
-        
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #######################################################################
@@ -780,7 +779,7 @@ def svm_loss(x, y):
     # TODO: Copy over your solution from A1.
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    
+
     N = x.shape[0]
     correct_scores = x[np.arange(len(x)), y].T
     margins = np.maximum(0, x - correct_scores[:, np.newaxis] + 1)
@@ -820,7 +819,7 @@ def softmax_loss(x, y):
 
     N = x.shape[0]
     x -= np.max(x, axis=1, keepdims=True)
-    probs = np.e ** x / np.sum(np.e ** x, axis=1, keepdims=True)
+    probs = np.e**x / np.sum(np.e**x, axis=1, keepdims=True)
     correct_prob = probs[np.arange(N), y]
     loss = -np.sum(np.log(correct_prob)) / N
     dx = probs.copy()

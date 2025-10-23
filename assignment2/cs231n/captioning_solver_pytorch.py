@@ -93,7 +93,6 @@ class CaptioningSolverPytorch(object):
         self.epoch = 0
         self.loss_history = []
 
-
     def _step(self):
         """
         Make a single gradient update. This is called by train() and should not
@@ -118,7 +117,7 @@ class CaptioningSolverPytorch(object):
         Run optimization to train the model.
         """
         for k, v in self.model.params.items():
-          v.requires_grad_()
+            v.requires_grad_()
 
         num_train = self.data["train_captions"].shape[0]
         iterations_per_epoch = max(num_train // self.batch_size, 1)
@@ -138,5 +137,4 @@ class CaptioningSolverPytorch(object):
             epoch_end = (t + 1) % iterations_per_epoch == 0
 
         for k, v in self.model.params.items():
-          v.requires_grad_(False)
-
+            v.requires_grad_(False)

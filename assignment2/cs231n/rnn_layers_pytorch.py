@@ -1,5 +1,5 @@
-"""This file defines layer types that are commonly used for recurrent neural networks.
-"""
+"""This file defines layer types that are commonly used for recurrent neural networks."""
+
 import torch
 
 
@@ -43,7 +43,7 @@ def rnn_step_forward(x, prev_h, Wx, Wh, b):
     ##############################################################################
     # TODO: Implement a single forward step for the vanilla RNN.                 #
     ##############################################################################
-    # 
+    #
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -52,7 +52,7 @@ def rnn_step_forward(x, prev_h, Wx, Wh, b):
 
 def rnn_forward(x, h0, Wx, Wh, b):
     """Run a vanilla RNN forward on an entire sequence of data.
-    
+
     We assume an input sequence composed of T vectors, each of dimension D. The RNN uses a hidden
     size of H, and we work over a minibatch containing N sequences. After running the RNN forward,
     we return the hidden states for all timesteps.
@@ -73,7 +73,7 @@ def rnn_forward(x, h0, Wx, Wh, b):
     # input data. You should use the rnn_step_forward function that you defined  #
     # above. You can use a for loop to help compute the forward pass.            #
     ##############################################################################
-    # 
+    #
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -82,7 +82,7 @@ def rnn_forward(x, h0, Wx, Wh, b):
 
 def word_embedding_forward(x, W):
     """Forward pass for word embeddings.
-    
+
     We operate on minibatches of size N where
     each sequence has length T. We assume a vocabulary of V words, assigning each
     word to a vector of dimension D.
@@ -101,7 +101,7 @@ def word_embedding_forward(x, W):
     #                                                                            #
     # HINT: This can be done in one line using Pytorch's array indexing.         #
     ##############################################################################
-    # 
+    #
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -133,7 +133,7 @@ def lstm_step_forward(x, prev_h, prev_c, Wx, Wh, b):
     # TODO: Implement the forward pass for a single timestep of an LSTM.        #
     # You may want to use the numerically stable sigmoid implementation above.  #
     #############################################################################
-    # 
+    #
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -143,7 +143,7 @@ def lstm_step_forward(x, prev_h, prev_c, Wx, Wh, b):
 
 def lstm_forward(x, h0, Wx, Wh, b):
     """Forward pass for an LSTM over an entire sequence of data.
-    
+
     We assume an input sequence composed of T vectors, each of dimension D. The LSTM uses a hidden
     size of H, and we work over a minibatch containing N sequences. After running the LSTM forward,
     we return the hidden states for all timesteps.
@@ -167,7 +167,7 @@ def lstm_forward(x, h0, Wx, Wh, b):
     # TODO: Implement the forward pass for an LSTM over an entire timeseries.   #
     # You should use the lstm_step_forward function that you just defined.      #
     #############################################################################
-    # 
+    #
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -177,7 +177,7 @@ def lstm_forward(x, h0, Wx, Wh, b):
 
 def temporal_affine_forward(x, w, b):
     """Forward pass for a temporal affine layer.
-    
+
     The input is a set of D-dimensional
     vectors arranged into a minibatch of N timeseries, each of length T. We use
     an affine function to transform each of those vectors into a new vector of
@@ -199,7 +199,7 @@ def temporal_affine_forward(x, w, b):
 
 def temporal_softmax_loss(x, y, mask, verbose=False):
     """A temporal version of softmax loss for use in RNNs.
-    
+
     We assume that we are making predictions over a vocabulary of size V for each timestep of a
     timeseries of length T, over a minibatch of size N. The input x gives scores for all vocabulary
     elements at all timesteps, and y gives the indices of the ground-truth element at each timestep.
@@ -227,7 +227,7 @@ def temporal_softmax_loss(x, y, mask, verbose=False):
     y_flat = y.reshape(N * T)
     mask_flat = mask.reshape(N * T)
 
-    loss = torch.nn.functional.cross_entropy(x_flat, y_flat, reduction='none')
+    loss = torch.nn.functional.cross_entropy(x_flat, y_flat, reduction="none")
     loss = loss * mask_flat.float()
     loss = loss.sum() / N
 

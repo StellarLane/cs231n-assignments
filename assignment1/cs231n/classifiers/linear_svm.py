@@ -101,9 +101,9 @@ def svm_loss_vectorized(W, X, y, reg):
     # loss.                                                                     #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    
+
     ind = (margins > 0).astype(int)
-    ind[np.arange(num_train), y] = -np.sum(ind, axis = 1)
+    ind[np.arange(num_train), y] = -np.sum(ind, axis=1)
     dW = X.T.dot(ind) / num_train
     dW += 2 * reg * W
     pass

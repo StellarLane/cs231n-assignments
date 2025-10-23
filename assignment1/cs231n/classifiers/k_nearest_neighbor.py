@@ -5,7 +5,7 @@ from past.builtins import xrange
 
 
 class KNearestNeighbor(object):
-    """ a kNN classifier with L2 distance """
+    """a kNN classifier with L2 distance"""
 
     def __init__(self):
         pass
@@ -128,8 +128,8 @@ class KNearestNeighbor(object):
         #########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        X_2 = np.sum(X ** 2, axis=1)
-        X_train_2 = np.sum(self.X_train ** 2, axis=1)
+        X_2 = np.sum(X**2, axis=1)
+        X_train_2 = np.sum(self.X_train**2, axis=1)
         dists = np.sqrt((X_2 - (2 * X @ self.X_train.T).T).T + X_train_2.T)
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -160,8 +160,8 @@ class KNearestNeighbor(object):
             # Hint: Look up the function numpy.argsort.                             #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-            
-            closest_y = self.y_train[np.argsort(dists[i])[:k]]            
+
+            closest_y = self.y_train[np.argsort(dists[i])[:k]]
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             #########################################################################

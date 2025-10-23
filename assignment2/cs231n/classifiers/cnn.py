@@ -61,7 +61,7 @@ class ThreeLayerConvNet(object):
         # **the width and height of the input are preserved**. Take a look at      #
         # the start of the loss() function to see how that happens.                #
         ############################################################################
-        # 
+        #
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
@@ -96,7 +96,7 @@ class ThreeLayerConvNet(object):
         # Remember you can use the functions defined in cs231n/fast_layers.py and  #
         # cs231n/layer_utils.py in your implementation (already imported).         #
         ############################################################################
-        # 
+        #
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
@@ -115,7 +115,7 @@ class ThreeLayerConvNet(object):
         # automated tests, make sure that your L2 regularization includes a factor #
         # of 0.5 to simplify the expression for the gradient.                      #
         ############################################################################
-        # 
+        #
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################

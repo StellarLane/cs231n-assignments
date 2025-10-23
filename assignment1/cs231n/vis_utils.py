@@ -41,7 +41,7 @@ def visualize_grid(Xs, ubound=255.0, padding=1):
 
 
 def vis_grid(Xs):
-    """ visualize a grid of images """
+    """visualize a grid of images"""
     (N, H, W, C) = Xs.shape
     A = int(ceil(sqrt(N)))
     G = np.ones((A * H + A, A * W + A, C), Xs.dtype)
@@ -62,7 +62,7 @@ def vis_grid(Xs):
 
 
 def vis_nn(rows):
-    """ visualize array of arrays of images """
+    """visualize array of arrays of images"""
     N = len(rows)
     D = len(rows[0])
     H, W, C = rows[0][0].shape
