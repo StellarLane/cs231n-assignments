@@ -43,14 +43,14 @@ def rnn_step_forward(x, prev_h, Wx, Wh, b):
     ##############################################################################
     # TODO: Implement a single forward step for the vanilla RNN.                 #
     ##############################################################################
-    #
+    next_h = torch.tanh(x.matmul(Wx) + prev_h.matmul(Wh) + b)
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
     return next_h
 
 
-def rnn_forward(x, h0, Wx, Wh, b):
+def     rnn_forward(x, h0, Wx, Wh, b):
     """Run a vanilla RNN forward on an entire sequence of data.
 
     We assume an input sequence composed of T vectors, each of dimension D. The RNN uses a hidden
@@ -73,7 +73,12 @@ def rnn_forward(x, h0, Wx, Wh, b):
     # input data. You should use the rnn_step_forward function that you defined  #
     # above. You can use a for loop to help compute the forward pass.            #
     ##############################################################################
-    #
+    x_permuted = x.permute(1, 0, 2)  # (T, N, D)
+    h_raw = []
+    h_raw.append(rnn_step_forward(x_permuted[0], h0, Wx, Wh, b))
+    for t in range(1, x.shape[1]):
+        h_raw.append(rnn_step_forward(x_permuted[t], h_raw[t - 1], Wx, Wh, b))
+    h = torch.stack(h_raw).permute(1, 0, 2)  # (N, T, H)
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
@@ -101,7 +106,7 @@ def word_embedding_forward(x, W):
     #                                                                            #
     # HINT: This can be done in one line using Pytorch's array indexing.         #
     ##############################################################################
-    #
+    out = W[x]
     ##############################################################################
     #                               END OF YOUR CODE                             #
     ##############################################################################
